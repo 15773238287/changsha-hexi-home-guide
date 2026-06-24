@@ -193,6 +193,126 @@
     .short-card h3 { margin: 9px 0 7px; font-size: 22px; }
     .short-card p { margin: 0; opacity: .82; line-height: 1.6; font-size: 14px; }
 
+    .map-shell {
+      display: grid;
+      grid-template-columns: minmax(0, 1.55fr) minmax(280px, .9fr);
+      gap: 18px;
+      align-items: stretch;
+    }
+    .city-map {
+      position: relative;
+      min-height: 560px;
+      overflow: hidden;
+      border-radius: 28px;
+      border: 1px solid rgba(88, 112, 91, .2);
+      background:
+        radial-gradient(circle at 24% 48%, rgba(191, 214, 171, .82), transparent 0 12%, transparent 18%),
+        radial-gradient(circle at 70% 75%, rgba(179, 211, 190, .72), transparent 0 16%, transparent 22%),
+        linear-gradient(135deg, #f8f1e6, #eef3e9 58%, #e7f0ec);
+      box-shadow: var(--shadow);
+    }
+    .city-map::before {
+      content: "";
+      position: absolute;
+      inset: -20% 40% -10% 50%;
+      transform: rotate(10deg);
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(90,145,168,.16), rgba(90,145,168,.42), rgba(90,145,168,.12));
+      filter: blur(.2px);
+    }
+    .map-label {
+      position: absolute;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.72);
+      color: #6d756c;
+      font-size: 12px;
+      border: 1px solid rgba(106, 118, 94, .12);
+      backdrop-filter: blur(8px);
+    }
+    .map-label.river { right: 17%; top: 28%; color: #497387; }
+    .map-label.meixi { left: 29%; top: 46%; }
+    .map-label.yanghu { left: 46%; bottom: 18%; }
+    .map-label.gushan { left: 27%; top: 12%; }
+    .map-label.binjiang { right: 16%; top: 18%; }
+    .map-marker {
+      position: absolute;
+      width: 26px;
+      height: 26px;
+      transform: translate(-50%, -100%);
+      display: grid;
+      place-items: center;
+      border-radius: 999px 999px 999px 4px;
+      rotate: -45deg;
+      background: #b65b4d;
+      color: white;
+      box-shadow: 0 8px 20px rgba(92, 45, 35, .24);
+      border: 2px solid rgba(255,255,255,.95);
+      text-decoration: none;
+      z-index: 3;
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+    .map-marker span { rotate: 45deg; font-size: 11px; font-weight: 800; }
+    .map-marker:hover {
+      transform: translate(-50%, -100%) scale(1.18);
+      box-shadow: 0 12px 26px rgba(92, 45, 35, .34);
+      z-index: 10;
+    }
+    .map-marker::after {
+      content: attr(data-name);
+      position: absolute;
+      left: 20px;
+      top: -7px;
+      rotate: 45deg;
+      white-space: nowrap;
+      padding: 5px 8px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.92);
+      color: #5b4436;
+      border: 1px solid rgba(120, 96, 76, .12);
+      box-shadow: 0 8px 20px rgba(59, 50, 39, .08);
+      font-size: 11px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .18s ease;
+    }
+    .map-marker:hover::after { opacity: 1; }
+    .map-side {
+      border-radius: 28px;
+      border: 1px solid rgba(88, 112, 91, .18);
+      background: rgba(255,255,255,.68);
+      box-shadow: var(--shadow);
+      padding: 22px;
+    }
+    .map-side h3 { margin: 0 0 10px; font: 500 26px/1.12 Georgia, "Songti SC", serif; color: var(--ink); }
+    .map-side p { margin: 0 0 16px; color: var(--muted); line-height: 1.7; font-size: 14px; }
+    .map-legend { display: grid; gap: 8px; max-height: 430px; overflow: auto; padding-right: 4px; }
+    .map-legend a {
+      display: grid;
+      grid-template-columns: 26px 1fr auto;
+      gap: 9px;
+      align-items: center;
+      padding: 9px 10px;
+      border-radius: 14px;
+      background: rgba(248, 243, 235, .78);
+      color: var(--ink);
+      text-decoration: none;
+      border: 1px solid rgba(124, 99, 76, .08);
+      font-size: 13px;
+    }
+    .map-legend small { color: var(--muted); }
+    .map-pin-mini {
+      display: grid;
+      place-items: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      background: #b65b4d;
+      color: white;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
     .cards {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -333,6 +453,7 @@
       font-size: 12px;
     }
     .action.primary { color: white; background: var(--green); border-color: var(--green); }
+    .action.nav { background: #fff4e5; border-color: #f0c98e; color: #8a5513; }
     .empty { grid-column: 1 / -1; padding: 80px 20px; text-align: center; color: var(--muted); }
 
     .method {
@@ -351,6 +472,7 @@
       .filters { grid-template-columns: 1fr 1fr; }
       .filters .search { grid-column: 1 / -1; }
       .shortlist { grid-template-columns: 1fr; }
+      .map-shell { grid-template-columns: 1fr; }
       .cards { grid-template-columns: 1fr; }
       .section-head { align-items: start; flex-direction: column; }
     }
@@ -363,6 +485,9 @@
       .filters .search { grid-column: auto; }
       .filter-shell { position: relative; top: auto; }
       .gallery { height: 245px; }
+      .city-map { min-height: 470px; }
+      .map-marker::after { display: none; }
+      .actions { flex-direction: column; }
       .facts { grid-template-columns: 1fr 1fr; }
       .detail-grid, .method { grid-template-columns: 1fr; }
       .topline { flex-direction: column; }
@@ -402,6 +527,31 @@
         <article class="short-card"><span>综合首选</span><h3>梅溪湖一期</h3><p>卓越浅水湾、万科梅溪郡、金茂悦。城市成熟度、湖边生活和地铁最均衡。</p></article>
         <article class="short-card"><span>生活方式首选</span><h3>洋湖核心</h3><p>龙湖春江郦城、卓越洋湖晴翠。湿地公园、荟聚商圈和物业体系更贴近长期自住。</p></article>
         <article class="short-card"><span>房龄首选</span><h3>谷山 / 梅溪湖二期</h3><p>龙湖舜山府、万科森林公园、华润琨瑜府。更新，但成熟商业和通勤要逐项实测。</p></article>
+      </div>
+    </section>
+
+    <section id="map">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow" style="color:var(--green)">city map</div>
+          <h2>长沙河西总地图</h2>
+        </div>
+        <p>把20个候选小区放在同一张河西位置图里，先判断板块、距离和看房动线。点击地图点位或右侧清单，可直接跳转高德地图核验楼盘实际位置。</p>
+      </div>
+      <div class="map-shell">
+        <div class="city-map" id="cityMap" aria-label="长沙河西候选楼盘总地图">
+          <span class="map-label river">湘江</span>
+          <span class="map-label meixi">梅溪湖</span>
+          <span class="map-label yanghu">洋湖湿地</span>
+          <span class="map-label gushan">谷山 / 尖山湖</span>
+          <span class="map-label binjiang">滨江 / 市府</span>
+          <div id="mapMarkers"></div>
+        </div>
+        <aside class="map-side">
+          <h3>点位怎么用</h3>
+          <p>地图落点按楼盘公开地名做近似定位，用于看相对方位；真正导航请点“高德”进入高德地图 POI 页面，再以具体楼栋和门牌复核。</p>
+          <div id="mapLegend" class="map-legend"></div>
+        </aside>
       </div>
     </section>
 
@@ -6000,6 +6150,33 @@ window.XHS_FEEDBACK = {
       }
     ];
 
+    const geoData = {
+      "卓越浅水湾": [112.893, 28.207],
+      "万科梅溪郡": [112.878, 28.205],
+      "梅溪湖金茂悦": [112.874, 28.197],
+      "金茂梅溪湖": [112.900, 28.201],
+      "中建梅溪湖中心": [112.905, 28.198],
+      "华润琨瑜府": [112.846, 28.195],
+      "龙湖舜山府": [112.881, 28.269],
+      "万科森林公园": [112.894, 28.267],
+      "招商雍山湖": [112.878, 28.257],
+      "龙湖春江郦城": [112.921, 28.115],
+      "卓越洋湖晴翠": [112.912, 28.112],
+      "建发央著": [112.914, 28.118],
+      "洋湖壹号": [112.915, 28.124],
+      "中建钰和城": [112.936, 28.130],
+      "中海阅麓山": [112.869, 28.113],
+      "保利西海岸": [112.960, 28.235],
+      "旭辉铂悦湘江": [112.956, 28.231],
+      "卓越中寰": [112.949, 28.224],
+      "金地中交麓谷香颂": [112.840, 28.214],
+      "招商华发依云曦城": [112.828, 28.205]
+    };
+    homes.forEach(h => {
+      const point = geoData[h.name];
+      if (point) h.geo = { lng: point[0], lat: point[1] };
+    });
+
     const $ = s => document.querySelector(s);
     const areaEl = $("#area"), budgetEl = $("#budget"), sortEl = $("#sort"), searchEl = $("#search");
     [...new Set(homes.map(h => h.area))].sort().forEach(area => {
@@ -6010,7 +6187,40 @@ window.XHS_FEEDBACK = {
       const q = encodeURIComponent(`长沙 ${name}`);
       return type === "image"
         ? `https://image.baidu.com/search/index?tn=baiduimage&word=${q}%20小区实景`
-        : `https://map.baidu.com/search/${q}`;
+        : amapUrl(name);
+    }
+
+    function amapUrl(name) {
+      const q = encodeURIComponent(`长沙 ${name}`);
+      return `https://uri.amap.com/search?keyword=${q}&city=长沙&view=map&src=changsha-hexi-home-guide`;
+    }
+
+    function projectPoint(geo) {
+      const box = { west:112.81, east:112.98, south:28.10, north:28.28 };
+      const x = ((geo.lng - box.west) / (box.east - box.west)) * 100;
+      const y = (1 - (geo.lat - box.south) / (box.north - box.south)) * 100;
+      return {
+        x: Math.max(4, Math.min(96, x)),
+        y: Math.max(8, Math.min(94, y))
+      };
+    }
+
+    function renderCityMap() {
+      const markers = $("#mapMarkers");
+      const legend = $("#mapLegend");
+      if (!markers || !legend) return;
+      const sorted = [...homes].sort((a,b) => b.score - a.score);
+      markers.innerHTML = sorted.map((h,index) => {
+        const p = projectPoint(h.geo);
+        return `<a class="map-marker" style="left:${p.x}%;top:${p.y}%"
+          href="${amapUrl(h.name)}" target="_blank" rel="noreferrer"
+          title="高德地图：${h.name}" data-name="${h.name}"><span>${index+1}</span></a>`;
+      }).join("");
+      legend.innerHTML = sorted.map((h,index) => `<a href="${amapUrl(h.name)}" target="_blank" rel="noreferrer">
+        <span class="map-pin-mini">${index+1}</span>
+        <span>${h.name}<br><small>${h.area} · 高德核位置</small></span>
+        <span>🧭</span>
+      </a>`).join("");
     }
 
     function feedbackBlock(name) {
@@ -6070,6 +6280,7 @@ window.XHS_FEEDBACK = {
           ${feedbackBlock(h.name)}
           <div class="actions">
             <a class="action primary" target="_blank" rel="noreferrer" href="${searchUrl(h.name)}">地图核位置</a>
+            <a class="action nav" target="_blank" rel="noreferrer" href="${amapUrl(h.name)}">🧭 高德导航</a>
             <a class="action" target="_blank" rel="noreferrer" href="${searchUrl(h.name,"image")}">看更多实景</a>
           </div>
         </div>
@@ -6099,6 +6310,7 @@ window.XHS_FEEDBACK = {
     }
     [searchEl,areaEl,budgetEl,sortEl].forEach(el => el.addEventListener(el.tagName === "INPUT" ? "input" : "change", render));
     $("#reset").addEventListener("click", () => { searchEl.value=""; areaEl.value=""; budgetEl.value=""; sortEl.value="score"; render(); });
+    renderCityMap();
     render();
   </script>
 </body>
